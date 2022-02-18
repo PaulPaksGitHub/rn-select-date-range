@@ -25,6 +25,8 @@ interface IProps {
   font?: string;
   selectedDateContainerStyle?: ViewStyle;
   selectedDateStyle?: TextStyle;
+  renderClearButton?: () => React.ReactNode;
+  clearButtonLabel?: React.ReactText;
 }
 
 const DateRangePicker = ({
@@ -36,6 +38,8 @@ const DateRangePicker = ({
   font,
   selectedDateContainerStyle,
   selectedDateStyle,
+  renderClearButton,
+  clearButtonLabel
 }: IProps) => {
   const [selectedDate, setSelectedDate] = useState(moment());
 
@@ -151,13 +155,15 @@ const DateRangePicker = ({
         selectedDateStyle={selectedDateStyle}
       />
       <View style={styles.clearContainer}>
-        <Pressable
-          disabled={isDateSelected()}
-          onPress={onPressClear}
-          style={[styles.clearBtn, { opacity: isDateSelected() ? 0.3 : 1 }]}
-        >
-          <Text style={{ fontFamily: font }}>Clear</Text>
-        </Pressable>
+        {renderClearButton ? renderClearButton() : (
+          <Pressable
+            disabled={isDateSelected()}
+            onPress={onPressClear}
+            style={[styles.clearBtn, { opacity: isDateSelected() ? 0.3 : 1 }]}
+          >
+            <Text style={{ fontFamily: font }}>{clearButtonLabel || "Clear"}</Text>
+          </Pressable>
+        )}
       </View>
     </View>
   );
